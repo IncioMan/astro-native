@@ -5,6 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import WaitingScreen from './screens/WaitingScreen';
+import TokenScreen from './screens/TokenScreen';
+import { store } from './store';
+import { Provider } from 'react-redux'
 
 export default function App() {
 
@@ -12,15 +15,18 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <TailwindProvider>
-        <Stack.Navigator>
-          <Stack.Screen name='Home' component={HomeScreen}/>
-          <Stack.Screen 
-            name='WaitingScreen' 
-            component={WaitingScreen}
-            options={{presentation:'fullScreenModal', headerShown: false}}/>
-        </Stack.Navigator>
-      </TailwindProvider>
+      <Provider store={store}>
+        <TailwindProvider>
+          <Stack.Navigator>
+            <Stack.Screen name='Home' component={HomeScreen}/>
+            <Stack.Screen name='Token' component={TokenScreen}/>
+            <Stack.Screen 
+              name='WaitingScreen' 
+              component={WaitingScreen}
+              options={{presentation:'fullScreenModal', headerShown: false}}/>
+          </Stack.Navigator>
+        </TailwindProvider>
+      </Provider>
     </NavigationContainer>
   );
 }

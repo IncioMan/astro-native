@@ -12,7 +12,7 @@ export default function WaitingScreen() {
   useEffect(()=>{
     setTimeout(() => {
       navigation.navigate("Home")
-    }, 4000);
+    }, 12000);
   })
 
   return (
