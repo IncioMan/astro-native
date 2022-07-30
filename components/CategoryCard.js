@@ -10,7 +10,9 @@ const CategoryCard = ({
     imageUrl,
     price,
     dailyPerc,
-    description
+    description,
+    volume,
+    inWallet
 }) => {
   const navigation = useNavigation();
 
@@ -26,7 +28,8 @@ const CategoryCard = ({
                 imageUrl,
                 price,
                 dailyPerc,
-                description
+                description,
+                inWallet
             })
         }}>
         <View className='flex-row align-bottom p-1 border border-white'>
@@ -46,7 +49,7 @@ const CategoryCard = ({
                 <Text className='flex-1 text-base font-bold'>{tokenName}</Text>
                 <Text className='text-base font-bold'>${price}</Text>
             </View>  
-            <Text className='pl-2 pr-2 pb-2 text-xs opacity-50'>{description}</Text>  
+            <Text className='pl-2 pr-2 pb-2 text-xs opacity-50'>{volume}</Text>  
         </View>
         
     </TouchableOpacity>

@@ -17,17 +17,20 @@ const PurchaseWithToken = ({
     tokenToPurchase
 }) => {
   const [isPressed, setIsPressed] = useState(false)
+  const [amount, setAmount] = useState(0)
   const dispatch = useDispatch();
   const handleAddPurchase = (value)=>{
     if(value===''){
         dispatch(resetPurchase())
+        setAmount(0)
         return
     }
+    setAmount(value)
     dispatch(addPurchase({
         fromToken: tokenName,
         toToken: tokenToPurchase,
         fromAmount: value,
-        toAmount: value*10
+        toAmount: parseFloat((value/310).toFixed(2))
     }))
   }
 
@@ -46,7 +49,7 @@ const PurchaseWithToken = ({
             <View className='flex-1 mr-4'>
                 <View className='flex-row'>
                     <Text className='font-bold text-lg flex-1'>{tokenName}</Text>
-                    <Text className='text-lg'>{price}</Text>
+                    <Text className='text-lg'>${price}</Text>
                 </View>
                 <View className='flex-row '>
                     <Text className='flex-1 text-gray-500'>In wallet:</Text>
@@ -79,7 +82,7 @@ const PurchaseWithToken = ({
                       }}
                     onChangeText={handleAddPurchase}
                 />
-                <Text className='text-lg'>{price}</Text>
+                <Text className='text-lg'>${parseFloat((price*amount).toFixed(2))}</Text>
                 <View className='w-14 mr-4'></View>
             </View>
         </View>

@@ -2,8 +2,9 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { ScrollView } from 'react-native'
 import CategoryCard from './CategoryCard'
+import { DataProvider } from '../utils/DataProvider'
 
-const CategoryRow = ({id, title, description}) => {
+const CategoryRow = ({id, title, description, tokens}) => {
   return (
     <View>
         <View className="mt-4 flex-row items-center justify-between px-4">
@@ -21,42 +22,19 @@ const CategoryRow = ({id, title, description}) => {
             className='pt-4'
         >
         {/*Category Cards*/}
+        {tokens.map((token)=>DataProvider.getToken(token)).map((token)=>(
             <CategoryCard
-                id='luna'
-                tokenName='LUNA'
+                id={token.name}
+                tokenName={token.name}
                 tokenAddress='xxx'
-                imageUrl='https://assets.terra.money/icon/svg/LUNA.png'
-                price={'1.80'}
-                dailyPerc={-12.4}
-                description={'324k Volume'}
+                imageUrl={token.imageUrl}
+                price={token.price}
+                dailyPerc={token.dailyPerc}
+                description={token.description}
+                volume={token.volume}
+                inWallet={token.inWallet}
             />
-            <CategoryCard
-                id='astro'
-                tokenName='ASTRO'
-                tokenAddress='xxx'
-                imageUrl='https://app.astroport.fi/tokens/astro.png'
-                price={0.04}
-                dailyPerc={+1.4}
-                description={'120k Volume'}
-            />
-            <CategoryCard
-                id='luna'
-                tokenName='LUNA'
-                tokenAddress='xxx'
-                imageUrl='https://assets.terra.money/icon/svg/LUNA.png'
-                price={1.80}
-                dailyPerc={-12.4}
-                description={'324k Volume'}
-            />
-            <CategoryCard
-                id='luna'
-                tokenName='LUNA'
-                tokenAddress='xxx'
-                imageUrl='https://assets.terra.money/icon/svg/LUNA.png'
-                price={1.8}
-                dailyPerc={-12.4}
-                description={'324k Volume'}
-            />
+        ))}
         </ScrollView>
     </View>
   )

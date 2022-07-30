@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image, ScrollView,StatusBar } from 'react-native'
 import { TouchableOpacity } from 'react-native'
 import CategoryRow from '../components/CategoryRow'
+import { DataProvider } from '../utils/DataProvider'
 
 export default function HomeScreen() {
 
@@ -37,21 +38,14 @@ export default function HomeScreen() {
       </View>
       {/*Categories*/}
       <ScrollView>
-        <CategoryRow
-          id="trending"
-          title="Trending Assets"
-          description="Most volume, most interesting!"
-        />
-        <CategoryRow
-          id="trending"
-          title="Evergreen"
-          description="These ones are never out of shape!"
-        />
-        <CategoryRow
-          id="trending"
-          title="New Listings"
-          description="Newly added. Be the first to get them!"
-        />
+        {DataProvider.getCategories().map((category)=>(
+          <CategoryRow
+            id={category.id}
+            title={category.name}
+            description={category.description}
+            tokens={category.tokens}
+          />
+        ))}
       </ScrollView>     
     </SafeAreaView>
   )

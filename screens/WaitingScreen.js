@@ -11,8 +11,8 @@ export default function WaitingScreen() {
 
   useEffect(()=>{
     setTimeout(() => {
-      navigation.navigate("Home")
-    }, 12000);
+      navigation.navigate("Done")
+    }, 4000);
   })
 
   return (

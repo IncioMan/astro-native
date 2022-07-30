@@ -5,6 +5,7 @@ import { ScrollView, TouchableOpacity } from 'react-native'
 import { ArrowLeftIcon } from 'react-native-heroicons/outline'
 import PurchaseWithToken from '../components/PurchaseWithToken'
 import RecapButton from '../components/RecapButton'
+import { DataProvider } from '../utils/DataProvider'
 
 const TokenScreen = () => {
     const tokens = [1,2,3,4,4,4]
@@ -18,7 +19,8 @@ const TokenScreen = () => {
             imageUrl,
             price,
             dailyPerc,
-            description
+            description,
+            inWallet
         }
     } = useRoute()  
 
@@ -63,27 +65,27 @@ const TokenScreen = () => {
                 <Text className='text-gray-500 font-bold'>In wallet</Text>
             </View>
             <View className='px-8'>
-                <Text className='text-gray-500 font-bold mr-4'>10.4</Text>
+                <Text className='text-gray-500 font-bold mr-4'>{inWallet}</Text>
             </View>
         </View>
         <View className='bg-white flex-row justify-between px-8 py-4'>
             <Text className='text-gray-500'>
-                The native coin of the Terra blockchain.
-                Used to pay for gas fees and provide liquidity on different DEXs.
+                {description}
             </Text>
         </View>
         <View>
             <Text className='px-8 pt-4 mb-3 font-bold text-xl'>Purchase With</Text>
             {/*Purchase with tokens*/}
-            {tokens.map((token)=>(
+            {Object.entries(DataProvider.getTokensPurchase(tokenName)).map(([name, token])=>
+            (
                 <PurchaseWithToken
-                    id={token}
-                    tokenName='LUNAX'
+                    id={name}
+                    tokenName={token.name}
                     tokenAddress=''
-                    imageUrl='https://app.astroport.fi/tokens/lunax.png'
-                    price='$1.81'
+                    imageUrl={token.imageUrl}
+                    price={token.price}
                     pricePerUnit={0.99}
-                    inWallet={10.3}
+                    inWallet={token.inWallet}
                     tokenToPurchase={tokenName}
                 />
             ))}

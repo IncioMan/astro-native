@@ -8,6 +8,7 @@ import WaitingScreen from './screens/WaitingScreen';
 import TokenScreen from './screens/TokenScreen';
 import { store } from './store';
 import { Provider } from 'react-redux'
+import DoneScreen from './screens/DoneScreen';
 
 export default function App() {
 
@@ -20,6 +21,9 @@ export default function App() {
           <Stack.Navigator>
             <Stack.Screen name='Home' component={HomeScreen}/>
             <Stack.Screen name='Token' component={TokenScreen}/>
+            <Stack.Screen 
+              name='Done' component={DoneScreen}
+              options={{presentation:'fullScreenModal', headerShown: false}}/>
             <Stack.Screen 
               name='WaitingScreen' 
               component={WaitingScreen}
