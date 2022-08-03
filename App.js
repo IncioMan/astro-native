@@ -9,6 +9,7 @@ import TokenScreen from './screens/TokenScreen';
 import { store } from './store';
 import { Provider } from 'react-redux'
 import DoneScreen from './screens/DoneScreen';
+import RecapScreen from './screens/RecapScreen';
 
 export default function App() {
 
@@ -28,6 +29,10 @@ export default function App() {
               name='WaitingScreen' 
               component={WaitingScreen}
               options={{presentation:'fullScreenModal', headerShown: false}}/>
+              <Stack.Screen 
+                name='RecapScreen' 
+                component={RecapScreen}
+                options={{presentation:'modal', headerShown: false}}/>
           </Stack.Navigator>
         </TailwindProvider>
       </Provider>

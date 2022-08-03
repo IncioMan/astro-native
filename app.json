@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "astro-native",
+    "name": "Astroport",
     "slug": "astro-native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/astro-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/al-logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000e37"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.incioman.astronative"
     },
     "web": {
       "favicon": "./assets/favicon.png"

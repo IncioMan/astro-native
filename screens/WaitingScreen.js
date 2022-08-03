@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StatusBar, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
 import * as Animatable from 'react-native-animatable'
@@ -17,6 +17,10 @@ export default function WaitingScreen() {
 
   return (
     <SafeAreaView className='bg-[#000e37] flex-1 justify-center items-center'>
+      <StatusBar
+          backgroundColor='#060d37'
+          barStyle={'light-content'}
+          />
       <Animatable.Image
         source={require("../assets/loading.gif")}
         animation="slideInUp"

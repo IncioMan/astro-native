@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { useLayoutEffect, useState } from 'react/cjs/react.development'
+import { useLayoutEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image, ScrollView,StatusBar } from 'react-native'
 import { TouchableOpacity } from 'react-native'
@@ -40,6 +40,7 @@ export default function HomeScreen() {
       <ScrollView>
         {DataProvider.getCategories().map((category)=>(
           <CategoryRow
+            key={category.id}
             id={category.id}
             title={category.name}
             description={category.description}

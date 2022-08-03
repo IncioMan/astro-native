@@ -11,7 +11,7 @@ export const categories = [
     name: 'New Listings',
     description:'Newly added. Be the first to get them!',
     tokens: ['VKR','NEB','PRISM']},
-    {id: 'newlistings',
+    {id: 'newlistings2',
     name: 'New Listings',
     description:'Newly added. Be the first to get them!',
     tokens: ['VKR','NEB','PRISM']}

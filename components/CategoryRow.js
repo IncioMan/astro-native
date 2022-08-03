@@ -24,6 +24,7 @@ const CategoryRow = ({id, title, description, tokens}) => {
         {/*Category Cards*/}
         {tokens.map((token)=>DataProvider.getToken(token)).map((token)=>(
             <CategoryCard
+                key={token.name}
                 id={token.name}
                 tokenName={token.name}
                 tokenAddress='xxx'

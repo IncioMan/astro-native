@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, StatusBar } from 'react-native'
 import {React, useLayoutEffect} from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { ScrollView, TouchableOpacity } from 'react-native'
@@ -32,7 +32,11 @@ const TokenScreen = () => {
 
     return (
     <>
-    <ScrollView>
+    <ScrollView className='pb-36'>
+        <StatusBar
+          backgroundColor='#060d37'
+          barStyle={'light-content'}
+          />
         <View className=''>
             <View className='flex-row p-4 pl-8 pr-8 h-48 bg-[#060d37] items-end '>
                 <View className='flex-1 justify-end'>      
@@ -79,6 +83,7 @@ const TokenScreen = () => {
             {Object.entries(DataProvider.getTokensPurchase(tokenName)).map(([name, token])=>
             (
                 <PurchaseWithToken
+                    key={name}
                     id={name}
                     tokenName={token.name}
                     tokenAddress=''
