@@ -27,14 +27,14 @@ export default function HomeScreen() {
   },[])
 
   return (
-    <SafeAreaView className='flex-1 p-4 bg-[#060d37]' style={{'height':'100%'}}>
+    <SafeAreaView className='flex-1 px-4 pt-4 bg-[#060d37]' style={{'height':'100%'}}>
         <StatusBar
             backgroundColor='#060d37'
             barStyle={'light-content'}
             />
       <View className='items-center'>
         <Image source={require('../assets/astro-white-logo.png')}
-              className='w-36 h-36'/>
+              className='w-28 h-28'/>
       </View>
       {/*Categories*/}
       <ScrollView>
