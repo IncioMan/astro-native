@@ -2,7 +2,7 @@ export const tokens = {
     LUNA: {
         name: 'LUNA',
         imageUrl: 'https://assets.terra.money/icon/svg/LUNA.png',
-        price: 2.14,
+        price: 2.01,
         inWallet:13,
         dailyPerc:-15.4,
         volume:'123k Volume',
@@ -11,7 +11,7 @@ export const tokens = {
     ASTRO: {
         name: 'ASTRO',
         imageUrl: 'https://app.astroport.fi/tokens/astro.png',
-        price: 0.068,
+        price: 0.061,
         inWallet:2150,
         dailyPerc:17.2,
         volume:'987k Volume',
@@ -20,7 +20,7 @@ export const tokens = {
     KUJI: {
         name: 'KUJI',
         imageUrl: 'https://app.osmosis.zone/_next/image?url=%2Ftokens%2Fkuji.png&w=96&q=75',
-        price: 0.5,
+        price: 1.1,
         inWallet:1009,
         dailyPerc:22.2,
         volume:'56k Volume',

@@ -10,30 +10,23 @@ import { store } from './store';
 import { Provider } from 'react-redux'
 import DoneScreen from './screens/DoneScreen';
 import RecapScreen from './screens/RecapScreen';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import WalletScreen from './screens/WalletScreen';
+import AssetsStackScreen from './screens/AssetsStackScreen';
+import TabsStackScreen from './screens/TabsStackScreen';
+
+
 
 export default function App() {
-
-  const Stack = createNativeStackNavigator();
+  
+  const Tab = createMaterialBottomTabNavigator();
 
   return (
     <NavigationContainer>
       <Provider store={store}>
         <TailwindProvider>
-          <Stack.Navigator>
-            <Stack.Screen name='Home' component={HomeScreen}/>
-            <Stack.Screen name='Token' component={TokenScreen}/>
-            <Stack.Screen 
-              name='Done' component={DoneScreen}
-              options={{presentation:'fullScreenModal', headerShown: false}}/>
-            <Stack.Screen 
-              name='WaitingScreen' 
-              component={WaitingScreen}
-              options={{presentation:'fullScreenModal', headerShown: false}}/>
-              <Stack.Screen 
-                name='RecapScreen' 
-                component={RecapScreen}
-                options={{presentation:'modal', headerShown: false}}/>
-          </Stack.Navigator>
+          <AssetsStackScreen/>
         </TailwindProvider>
       </Provider>
     </NavigationContainer>

@@ -8,7 +8,6 @@ import RecapButton from '../components/RecapButton'
 import { DataProvider } from '../utils/DataProvider'
 
 const TokenScreen = () => {
-    const tokens = [1,2,3,4,4,4]
     const navigation = useNavigation()
     const {
       params:
@@ -32,7 +31,7 @@ const TokenScreen = () => {
 
     return (
     <>
-    <ScrollView className='pb-36'>
+    <ScrollView className='pb-32'>
         <StatusBar
           backgroundColor='#060d37'
           barStyle={'light-content'}
