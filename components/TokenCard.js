@@ -10,7 +10,7 @@ function TokenCard({token}) {
   const tokenData = tokens[token]
 
   return (
-    <TouchableOpacity className='border-b border-gray-500 flex flex-row items-center px-2 py-1'
+    <TouchableOpacity className=' opacity-80 border-gray-500 flex flex-row items-center px-2 py-4'
         onPress={()=>{
             navigation.navigate('Token', 
             {
@@ -30,15 +30,15 @@ function TokenCard({token}) {
             source={{ uri: tokenData?.imageUrl}}
         /> 
         <View className='flex-1 pl-4'>
-            <Text className='text-white text-base font-bold'>{tokenData?.name}</Text>
+            <View className='flex-row'>
+                <Text className='flex-1 text-white text-base font-bold'>{tokenData?.name}</Text>
+                <Text className='text-gray-400 text-base'>$ {tokenData?.price}</Text>
+            </View>
             <View className='flex-row items-center'>
                 <Text className='text-gray-400 text-xs'>24h: {tokenData?.dailyPerc}%</Text>
-                {(tokenData?.dailyPerc>=0)&&<ArrowSmUpIcon color={'#3edd61'} size={18}></ArrowSmUpIcon>}
-                {(tokenData?.dailyPerc<0)&&<ArrowSmDownIcon color={'#ef5176'} size={18}></ArrowSmDownIcon>}
+                {(tokenData?.dailyPerc>=0)&&<ArrowSmUpIcon color={'gray'} size={18}></ArrowSmUpIcon>}
+                {(tokenData?.dailyPerc<0)&&<ArrowSmDownIcon color={'gray'} size={18}></ArrowSmDownIcon>}
             </View>
-        </View>
-        <View>
-            <Text className='text-gray-400 text-lg'>${tokenData?.price}</Text>
         </View>
     </TouchableOpacity>
   )

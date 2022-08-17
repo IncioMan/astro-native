@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
 import * as Animatable from 'react-native-animatable'
@@ -34,7 +34,7 @@ export default function WaitingScreen() {
       >
       Waiting for transaction confirmation
       </Animatable.Text>
-      <Progress.Circle size={40} indeterminate={true} color='white'/>
+      <ActivityIndicator size={'large'} color='white'/>
     </SafeAreaView>
   )
 }

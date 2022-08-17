@@ -26,13 +26,23 @@ function FavoriteCard({token}) {
     >
         <Image 
             /*border-solid border-white rounded-full border-4 p-1*/
-            className = 'w-20 h-20'
+            className = 'w-16 h-16'
             source={{ uri: tokenData?.imageUrl}}
         />  
         <View className='flex-row items-center justify-center w-full pt-2'>
-            {(tokenData?.dailyPerc>=0)&&<View className='w-3 h-3 rounded-full bg-[#3edd61]'></View>}
-            {(tokenData?.dailyPerc<0)&&<View className='w-3 h-3 rounded-full bg-[#ef5176]'></View>}
-            <Text className='text-white pl-2'>${tokenData?.price}</Text>
+            {(tokenData?.dailyPerc>=0)&&
+                <>
+                    <View className='w-3 h-3 rounded-full bg-[#3edd61]'></View>
+                    <Text className='text-[#3edd61] px-2'>${tokenData?.price}</Text>
+                </>
+            }
+            {(tokenData?.dailyPerc<0)&&
+                <>
+                    <View className='w-3 h-3 rounded-full bg-[#ef5176]'></View>
+                    <Text className='text-[#ef5176] px-2'>${tokenData?.price}</Text>
+                </>
+            }
+            <View className='w-3 h-3 rounded-full bg-transparent'></View>
         </View> 
     </TouchableOpacity>
   )
