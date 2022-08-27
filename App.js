@@ -15,21 +15,23 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import WalletScreen from './screens/WelcomeScreen';
 import AssetsStackScreen from './stacks/AssetsStackScreen';
 import WelcomeStackScreen from './stacks/WelcomeStackScreen';
-
-
+import "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function App() {
   
   const Tab = createMaterialBottomTabNavigator();
 
   return (
-    <NavigationContainer>
-      <Provider store={store}>
-        <TailwindProvider>
-          <WelcomeStackScreen/>
-        </TailwindProvider>
-      </Provider>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <NavigationContainer>
+        <Provider store={store}>
+          <TailwindProvider>
+            <WelcomeStackScreen/>
+          </TailwindProvider>
+        </Provider>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 

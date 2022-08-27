@@ -16,8 +16,8 @@ function WelcomeStackScreen() {
     return (
         <AssetsStack.Navigator>
             <AssetsStack.Screen 
-                name='Done' 
-                component={WelcomeScreen}
+                name='Welcome' 
+                component={AssetsStackScreen}
                 options={{presentation:'fullScreenModal', headerShown: false}}
             />
             <AssetsStack.Screen 
