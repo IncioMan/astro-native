@@ -7,7 +7,7 @@ import Animated from 'react-native-reanimated';
 import { interpolate } from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
 
-function TokensCarousel({tokens}) {
+function TokensCarousel({tokens, setFromToken}) {
     const width = Dimensions.get('window').width;
     tokens = tokens.map((t)=>t[1])
     const itemSize = 80;
@@ -70,10 +70,10 @@ function TokensCarousel({tokens}) {
             height={50}
             style={{
                 width: width,
-                height: width / 2
+                height: 100
             }}
             data={tokens}
-            //onSnapToItem={(index) => setSelected(index)}
+            onSnapToItem={(index) => setFromToken(index)}
             customAnimation={animationStyle}
             renderItem={({ index }) => (
                 <TouchableOpacity 
