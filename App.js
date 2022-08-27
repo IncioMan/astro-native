@@ -12,9 +12,9 @@ import DoneScreen from './screens/DoneScreen';
 import RecapScreen from './screens/RecapScreen';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import WalletScreen from './screens/WalletScreen';
-import AssetsStackScreen from './screens/AssetsStackScreen';
-import TabsStackScreen from './screens/TabsStackScreen';
+import WalletScreen from './screens/WelcomeScreen';
+import AssetsStackScreen from './stacks/AssetsStackScreen';
+import WelcomeStackScreen from './stacks/WelcomeStackScreen';
 
 
 
@@ -26,7 +26,7 @@ export default function App() {
     <NavigationContainer>
       <Provider store={store}>
         <TailwindProvider>
-          <AssetsStackScreen/>
+          <WelcomeStackScreen/>
         </TailwindProvider>
       </Provider>
     </NavigationContainer>

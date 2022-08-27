@@ -3,9 +3,7 @@ import { View } from 'react-native'
 
 function WalletScreen() {
   return (
-    <View>
-        
-    </View>
+    <View></View>
   )
 }
 
