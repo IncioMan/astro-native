@@ -9,6 +9,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import Animated,{ interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { ArrowRightIcon, ChevronUpIcon} from 'react-native-heroicons/outline'
 import { tokens } from '../data/tokens'
+import { TextInput } from 'react-native'
+import RecapButton from '../components/RecapButton'
 
 const TokenScreen = () => {
     const navigation = useNavigation()
@@ -18,8 +20,14 @@ const TokenScreen = () => {
     const {
       params:
         {
+            id,
             tokenName,
-            imageUrl
+            tokenAddress,
+            imageUrl,
+            price,
+            dailyPerc,
+            description,
+            inWallet
         }
     } = useRoute()  
     const tokens = Object.entries(DataProvider.getTokensPurchase(tokenName))
@@ -61,37 +69,48 @@ const TokenScreen = () => {
         }
     })
 
+    const inputFormAnimatedStyleBegin = useAnimatedStyle(()=>{
+        const interpolation = interpolate(fromTokenSelected.value, [0,1], [height/2, 0])
+        return {
+            transform: [{
+                translateY: withTiming(interpolation, {duration: 1000})
+            }],
+            opacity: withTiming(fromTokenSelected.value, {duration:500})
+        }
+    })
+
     return (
     <>
-    <SafeAreaView className='h-full'>
+    <SafeAreaView className='h-full bg-[#060d37]'>
         <StatusBar
           backgroundColor='#060d37'
           barStyle={'light-content'}
           />
+        {/*Hidden top*/}
         <Animated.View
-            className='absolute bg-[#060d37] py-20 top-0 w-full z-10'
+            className='absolute bg-[#ffffff] pt-20 top-0 w-full z-10'
             style={[{height: height/2}, 
                     amountSelectorTitleAnimatedStyle
                 ]}
         >
             <View className='justify-center'>
-                <Text className=' text-white text-center text-4xl'>
+                <Text className=' text-black text-center text-xl'>
                     How much to purchase?
                 </Text>
             </View>
-            <View className='pt-8  opacity-70 flex-row justify-center items-center'>
+            <View className='pt-4 flex-row justify-center items-center'>
                 <Image
                     source={{
                         uri: fromToken !== null ? tokens[fromToken][1]?.imageUrl : null
                     }}
-                    className='h-20 w-20 rounded-sm mb-1 mt-2 mr-1'
+                    className='h-16 w-16 rounded-sm mb-1 mt-2 mr-1'
                 />
-                <ArrowRightIcon color={'white'} size={40}></ArrowRightIcon>
+                <ArrowRightIcon color={'black'} size={24}></ArrowRightIcon>
                 <Image
                     source={{
                         uri: imageUrl
                     }}
-                    className='h-20 w-20 rounded-sm mb-1 mt-2 mr-1'
+                    className='h-16 w-16 rounded-sm mb-1 mt-2 ml-1'
                 />
             </View>
             <View className='w-full justify-center          
@@ -101,28 +120,42 @@ const TokenScreen = () => {
                         className='h-8 w-8 justify-center 
                             shadow-xl bg-white 
                             items-center rounded-full relative -bottom-3'>
-                <Text className='text-black font-bold text-base'>X</Text>
-            </TouchableOpacity>
+                    <Text className='text-black font-bold text-base'>X</Text>
+                </TouchableOpacity>
             </View>
         </Animated.View>
+        {/*Visible top*/}
         <Animated.View 
             style={[{height: height},fromTokenSelectorAnimatedStyle]}
-            className='absolute py-20 overflow-hidden bg-[#060d37]]' 
+            className='absolute pt-16 pb-8 overflow-hidden bg-[#ffffff]]' 
             >
             <Animated.View className='h-full' style={fromTokenSelectorContentAnimatedStyle}>
                 <View className='justify-center'>
-                    <Text className=' text-white text-center text-4xl'>
-                        What to use to purchase it?
+                    <Text className=' text-black text-center text-4xl'>
+                        {tokenName}
                     </Text>
                 </View>
-                <View className='justify-center items-center flex-1'>
+                <View className='justify-center pt-4 px-8'>
+                    <Text className=' text-black text-justify text-base'>
+                        {description}
+                    </Text>
+                </View>
+                <View 
+                    className='border-6 border-white 
+                               rounded-full justify-center 
+                               items-center flex-1'>
                     <Image
                         source={{
                             uri: imageUrl
                         }}
-                        className='opacity-50 h-48 w-48 
-                        rounded-sm mb-1 mt-2 mr-1'
+                        className='h-32 w-32 
+                        rounded-sm'
                     />
+                </View>
+                <View className='justify-center'>
+                    <Text className=' text-black pb-4 text-center text-xl'>
+                        What do you want to pay with?
+                    </Text>
                 </View>
                 <View className='justify-center items-center'>
                     <TokensCarousel 
@@ -131,15 +164,31 @@ const TokenScreen = () => {
                         setFromToken={setFromToken}
                     />
                 </View>
-                <Animated.View className='justify-center items-center pr-3 h-50'>
-                    <TouchableOpacity
+                <Animated.View className='opacity-90 justify-end items-center'>
+                    <TouchableOpacity 
                         onPress={()=>{fromTokenSelected.value=1}}
-                        >
-                        <ChevronUpIcon color={'white'} size={30}/>
+                        className='h-12 w-48 justify-center 
+                            bg-transparent 
+                            items-center rounded-full relative -bottom-3'>
+                        <ChevronUpIcon color={'black'} size={30}/>
                     </TouchableOpacity>
                 </Animated.View>
             </Animated.View>
         </Animated.View>
+        {/*Hidden top*/}
+        <Animated.View 
+            style={inputFormAnimatedStyleBegin}
+            className='absolute -z-10 bottom-0 h-[70%] pt-16 w-full justify-center items-center'>
+            <TextInput
+                className='text-white text-2xl text-center h-12 border-1 w-40 bg-transparent border-gray-50 mx-8 my-2 rounded-xl'
+                placeholder='Amount'
+                placeholderTextColor='gray'
+                underlineColorAndroid='gray'
+                keyboardType = 'numeric'
+                textAlign='center'
+            />
+            <RecapButton/>
+      </Animated.View>
     </SafeAreaView>
     </>
     )

@@ -67,25 +67,27 @@ function TokensCarousel({tokens, setFromToken}) {
         <Carousel
             loop
             width={width/5}
-            height={50}
+            height={150}
             style={{
                 width: width,
-                height: 100
+                height: 150
             }}
             data={tokens}
             onSnapToItem={(index) => setFromToken(index)}
             customAnimation={animationStyle}
             renderItem={({ index }) => (
-                <TouchableOpacity 
+                <View 
                     className='radius-full justify-center items-center'>
+                    <Text className='text-xs opacity-60 font-bold'>{tokens[index].inWallet}</Text>
                     <Image
                         source={{
                             uri: tokens[index].imageUrl
                         }}
-                        className='h-12 w-12
-                        rounded-sm mb-1 mt-2 mr-1'
+                        className='h-16 w-16
+                        rounded-sm my-1 mr-1'
                     />
-                </TouchableOpacity>
+                    <Text className='text-xs opacity-60 font-bold'>{tokens[index].name}</Text>
+                </View>
             )}
         />
     </Animated.View>
