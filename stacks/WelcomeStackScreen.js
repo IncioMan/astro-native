@@ -9,6 +9,7 @@ import WaitingScreen from '../screens/WaitingScreen';
 import AssetsStackScreen from './AssetsStackScreen';
 import WalletScreen from '../screens/WelcomeScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
+import SetupScreen from '../screens/SetupScreen';
 
 function WelcomeStackScreen() {
 
@@ -16,8 +17,13 @@ function WelcomeStackScreen() {
     return (
         <AssetsStack.Navigator>
             <AssetsStack.Screen 
-                name='Done' 
+                name='Welcome' 
                 component={WelcomeScreen}
+                options={{presentation:'fullScreenModal', headerShown: false}}
+            />
+            <AssetsStack.Screen 
+                name='Setup' 
+                component={SetupScreen}
                 options={{presentation:'fullScreenModal', headerShown: false}}
             />
             <AssetsStack.Screen 

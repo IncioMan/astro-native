@@ -1,14 +1,18 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useEffect } from 'react'
-import { Dimensions, Image, StatusBar, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, Dimensions, Image, StatusBar, Text, TouchableOpacity, View } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import Animated, {interpolate, useSharedValue, withDelay, useAnimatedStyle, withTiming, withSpring} from 'react-native-reanimated'
+import { CheckIcon } from 'react-native-heroicons/outline'
 
 function WelcomeScreen() {
   const {height, width} = Dimensions.get('window')
   const imagePosition = useSharedValue(1)
   const helloText = useSharedValue(0)
   const navigation = useNavigation()
+  
+  const [connectingWallet, setConnectingWallet] = useState(false)
+  const [connected, setConnected] = useState(false)
 
   const imageContainerAnimatedStyle = useAnimatedStyle(()=>{
     const interpolation = interpolate(imagePosition.value, [0,1], [-height/2, 0])
@@ -42,6 +46,9 @@ function WelcomeScreen() {
   })
 
   const subtextAnimatedStyleBegin = useAnimatedStyle(()=>{
+    if(imagePosition.value===0){
+      return {}
+    }
     return {
      opacity: withDelay(3000,withTiming(helloText.value, {duration: 5000}))
    }
@@ -133,16 +140,38 @@ function WelcomeScreen() {
         style={formAnimatedStyleBegin}
         className='absolute -z-10 h-[60%] pt-16 w-full justify-center items-center'>
         <TextInput
-            className='h-12 border-1 w-72 bg-transparent border-gray-50 mx-8 my-2 rounded-xl'
+            className='h-12 border-1 w-52 text-center bg-transparent border-gray-50 mx-8 my-2 rounded-xl'
             placeholder='Astrochad Username'
         ></TextInput>
-        <TouchableOpacity 
-              onPress={()=>navigation.navigate("Home")}
+        {(!connected&&!connectingWallet)&&<TouchableOpacity 
+              onPress={()=> {
+                  setConnectingWallet(true)
+                  setTimeout(() => {
+                    setConnectingWallet(false)
+                    setConnected(true)
+                  }, 4000);
+              }}
               className=' border w-72 border-white bg-[#5643f2] mx-16 p-3 my-2
                   rounded-full flex-row justify-center 
                   items-center space-x-1'>
           <Text className='flex-end text-white font-bold text-base'>Connect Wallet</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
+        {(!connected&&connectingWallet)&&<ActivityIndicator className='pt-4' size={'large'} color='#5643f2'/>}
+        {(connected)&&
+          <View className='w-full'>
+            <View className='flex-row justify-center items-center'>
+              <Text className='py-8 text-center text-black'>terra1clz9canwh...m5dgqh29np</Text>
+              <CheckIcon color={'#7befc1'} size={32}/>
+            </View>
+            <TouchableOpacity 
+              onPress={()=>navigation.navigate('Setup')}
+              className=' border border-white bg-[#5643f2] mx-8 p-3 my-2
+                  rounded-full justify-center 
+                  items-center space-x-1'>
+              <Text className='flex-end text-white font-bold text-base'>Next</Text>
+            </TouchableOpacity>
+          </View>
+        }
       </Animated.View>
     </View>
   )
