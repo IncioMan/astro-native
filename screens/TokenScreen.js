@@ -11,6 +11,8 @@ import { ArrowLeftIcon, ArrowRightIcon, ChevronUpIcon} from 'react-native-heroic
 import { tokens } from '../data/tokens'
 import { TextInput } from 'react-native'
 import RecapButton from '../components/RecapButton'
+import { useDispatch } from 'react-redux'
+import { addPurchase, resetPurchase } from '../features/purchaseSlice'
 
 const TokenScreen = () => {
     const navigation = useNavigation()
@@ -18,6 +20,7 @@ const TokenScreen = () => {
     const [fromToken, setFromToken] = useState(0)
     const [showTokenFrom, setShowTokenFrom] = useState(false)
     const fromTokenSelected = useSharedValue(0)
+    const dispatch = useDispatch();
     const {
       params:
         {
@@ -51,6 +54,18 @@ const TokenScreen = () => {
         }, 2000);
     }
 
+    const handleAddPurchase = (value)=>{
+        if(value===''){
+            dispatch(resetPurchase())
+            return
+        }
+        dispatch(addPurchase({
+            fromToken: tokens[fromToken][1]?.name,
+            toToken: tokenName,
+            fromAmount: value,
+            toAmount: parseFloat((value/310).toFixed(2))
+        }))
+    }
 
     const tokenImageAnimatedStyle = useAnimatedStyle(()=>{
         const scaleInterp = interpolate(fromTokenSelected.value, [0,1], [1,5/6])
@@ -201,9 +216,10 @@ const TokenScreen = () => {
                     borderBottomWidth: 1,
                     outline: 'none'
                     }}
+                onChangeText={handleAddPurchase}
             />
-            <RecapButton/>
-        </Animated.View>          
+        </Animated.View>
+        <RecapButton/>          
     </SafeAreaView>
     </>
     )

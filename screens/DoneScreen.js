@@ -7,12 +7,20 @@ import { Image, ScrollView,StatusBar } from 'react-native'
 import { TouchableOpacity } from 'react-native'
 import CategoryRow from '../components/CategoryRow'
 import { CheckIcon } from 'react-native-heroicons/outline'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectPurchase } from '../features/purchaseSlice'
+import { addPurchase, resetPurchase } from '../features/purchaseSlice'
+
 
 export default function DoneScreen() {
   const navigation = useNavigation()
   const purchase = useSelector(selectPurchase)
+  const dispatch = useDispatch();
+
+  const handleClick = ()=>{
+    dispatch(resetPurchase());
+    navigation.navigate('Home')
+  }
 
   return (
     <SafeAreaView
@@ -22,7 +30,7 @@ export default function DoneScreen() {
           barStyle={'light-content'}
           />
       <TouchableOpacity 
-        onPress={()=>{navigation.navigate('Home')}}
+        onPress={handleClick}
         className='justify-center flex-1 items-center'>
       <Text className='text-[#3edd61] text-lg font-bold'>
         You bought {purchase?.purchase?.toAmount} {purchase?.purchase?.toToken}
