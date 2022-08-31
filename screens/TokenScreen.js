@@ -6,8 +6,8 @@ import TokensCarousel from '../components/TokensCarousel'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import Animated,{ interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
-import { ArrowRightIcon, ChevronUpIcon} from 'react-native-heroicons/outline'
+import Animated,{ interpolate, useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated'
+import { ArrowLeftIcon, ArrowRightIcon, ChevronUpIcon} from 'react-native-heroicons/outline'
 import { tokens } from '../data/tokens'
 import { TextInput } from 'react-native'
 import RecapButton from '../components/RecapButton'
@@ -16,6 +16,7 @@ const TokenScreen = () => {
     const navigation = useNavigation()
     const {height, width} = Dimensions.get('window')
     const [fromToken, setFromToken] = useState(0)
+    const [showTokenFrom, setShowTokenFrom] = useState(false)
     const fromTokenSelected = useSharedValue(0)
     const {
       params:
@@ -38,98 +39,79 @@ const TokenScreen = () => {
             headerShown: false
         })
     },[])
+
     useEffect(()=>{
         console.log(fromToken)
     },[fromToken])
 
-    const fromTokenSelectorAnimatedStyle = useAnimatedStyle(()=>{
-        const interpolation = interpolate(fromTokenSelected.value, [1,0], [-height/2, 0])
+    const handleTokenFromSelected = () =>{
+        fromTokenSelected.value = 1
+        setTimeout(() => {
+            setShowTokenFrom(true)
+        }, 2000);
+    }
+
+
+    const tokenImageAnimatedStyle = useAnimatedStyle(()=>{
+        const scaleInterp = interpolate(fromTokenSelected.value, [0,1], [1,5/6])
+        return {
+            transform: [
+            {
+                scale: withDelay(500,withTiming(scaleInterp, {duration: 1000}))
+            }],
+        }
+    })
+
+    const tokenFromAnimatedStyle = useAnimatedStyle(()=>{
+        const interpolation = interpolate(fromTokenSelected.value, [0,1], [0,1])
+        return {
+            opacity: withDelay(2000,withTiming(interpolation, {duration:500})),
+            visibility: 'visible'
+        }
+    })
+
+    const tokenInfoAnimatedStyle = useAnimatedStyle(()=>{
+        const interpolation = interpolate(fromTokenSelected.value, [0,1], [1,0])
+        return {
+            opacity: withTiming(interpolation, {duration:500})
+        }
+    })
+
+    const carouselBottomAnimatedStyle = useAnimatedStyle(()=>{
+        const scaleInterp = interpolate(fromTokenSelected.value, [0,1], [0, height/2])
+        const interpolation = interpolate(fromTokenSelected.value, [0,1], [1,0])
+        return {
+            opacity: withDelay(0,withTiming(interpolation, {duration: 500}))
+        }
+    })
+
+    const amountInputAnimatedStyle = useAnimatedStyle(()=>{
+        const interpolation = interpolate(fromTokenSelected.value, [0,1], [height,2/3*height-50])
         return {
             transform: [{
-                translateY: withTiming(interpolation, {duration: 1000})
+                translateY: withTiming(interpolation, {duration: 2000})
             }]
-        }
-    })
-
-    const fromTokenSelectorContentAnimatedStyle = useAnimatedStyle(()=>{
-        const interpolationOpacity = interpolate(fromTokenSelected.value, [0,1], [1,0])
-        return {
-            opacity: withTiming(interpolationOpacity, {duration:500})
-        }
-    })
-
-
-    const amountSelectorTitleAnimatedStyle = useAnimatedStyle(()=>{
-        const interpolation = interpolate(fromTokenSelected.value, [0,1], [-height/2, 0])
-        return {
-            transform: [{
-                translateY: withTiming(interpolation, {duration: 1000})
-            }],
-            opacity: withTiming(fromTokenSelected.value, {duration:500})
-        }
-    })
-
-    const inputFormAnimatedStyleBegin = useAnimatedStyle(()=>{
-        const interpolation = interpolate(fromTokenSelected.value, [0,1], [height/2, 0])
-        return {
-            transform: [{
-                translateY: withTiming(interpolation, {duration: 1000})
-            }],
-            opacity: withTiming(fromTokenSelected.value, {duration:500})
         }
     })
 
     return (
     <>
-    <SafeAreaView className='h-full bg-[#060d37]'>
+    <SafeAreaView className='h-full bg-[#ffffff]'>
         <StatusBar
-          backgroundColor='#060d37'
-          barStyle={'light-content'}
+          backgroundColor='#ffffff'
+          barStyle={'dark-content'}
           />
-        {/*Hidden top*/}
-        <Animated.View
-            className='absolute bg-[#ffffff] pt-20 top-0 w-full z-10'
-            style={[{height: height/2}, 
-                    amountSelectorTitleAnimatedStyle
-                ]}
-        >
-            <View className='justify-center'>
-                <Text className=' text-black text-center text-xl'>
-                    How much to purchase?
-                </Text>
-            </View>
-            <View className='pt-4 flex-row justify-center items-center'>
-                <Image
-                    source={{
-                        uri: fromToken !== null ? tokens[fromToken][1]?.imageUrl : null
-                    }}
-                    className='h-16 w-16 rounded-sm mb-1 mt-2 mr-1'
-                />
-                <ArrowRightIcon color={'black'} size={24}></ArrowRightIcon>
-                <Image
-                    source={{
-                        uri: imageUrl
-                    }}
-                    className='h-16 w-16 rounded-sm mb-1 mt-2 ml-1'
-                />
-            </View>
-            <View className='w-full justify-center          
-                            items-center absolute bottom-0'>
-                <TouchableOpacity 
-                        onPress={()=>{fromTokenSelected.value=0}}
-                        className='h-8 w-8 justify-center 
-                            shadow-xl bg-white 
-                            items-center rounded-full relative -bottom-3'>
-                    <Text className='text-black font-bold text-base'>X</Text>
-                </TouchableOpacity>
-            </View>
-        </Animated.View>
         {/*Visible top*/}
         <Animated.View 
-            style={[{height: height},fromTokenSelectorAnimatedStyle]}
+            style={[{height: height}]}
             className='absolute pt-16 pb-8 overflow-hidden bg-[#ffffff]]' 
             >
-            <Animated.View className='h-full' style={fromTokenSelectorContentAnimatedStyle}>
+            <TouchableOpacity
+                onPress={navigation.goBack}
+                className='absolute left-9 p-2 bg-white rounded-full'>
+                <ArrowLeftIcon size={20} color='#060d37'></ArrowLeftIcon>
+            </TouchableOpacity>
+            <Animated.View className='h-full' style={[]}>
                 <View className='justify-center'>
                     <Text className=' text-black text-center text-4xl'>
                         {tokenName}
@@ -143,52 +125,85 @@ const TokenScreen = () => {
                 <View 
                     className='border-6 border-white 
                                rounded-full justify-center 
-                               items-center flex-1'>
-                    <Image
+                               items-center flex-row flex-1'>
+                    <Animated.View className='mr-2 h-24' style={[tokenInfoAnimatedStyle]}>
+                        <Text className='text-right h-1/3 font-bold text-sm opacity-70 text-black'>$ {price}</Text>
+                        <Text className='text-right h-1/3 font-bold text-sm opacity-70 text-black'>{inWallet} in wallet</Text>
+                        <Text className='text-right h-1/3 font-bold text-sm opacity-70 text-black'>200k volume</Text>
+                    </Animated.View>
+                    <View className='flex-row justify-center items-center'>
+                        {(showTokenFrom)&&<Animated.View 
+                            className='opacity-0 flex-row justify-center items-center'
+                            style={[tokenFromAnimatedStyle]}
+                        >
+                            <Image
+                                source={{
+                                    uri: fromToken !== null ? tokens[fromToken][1]?.imageUrl : null
+                                }}
+                                className='h-20 w-20 rounded-sm mb-1 mt-2 mr-1'
+                            />
+                            <ArrowRightIcon color={'black'} size={24}></ArrowRightIcon>
+                        </Animated.View>}
+                        <Animated.Image
+                        style={[tokenImageAnimatedStyle]}
                         source={{
                             uri: imageUrl
                         }}
-                        className='h-32 w-32 
+                        className='h-24 w-24 
                         rounded-sm'
-                    />
+                        />
+                    </View>
+                    <Animated.View className='ml-2 h-24' style={[tokenInfoAnimatedStyle]}>
+                        <Text className='text-left h-1/3 font-bold text-sm opacity-70 text-black'>+4.3% in 24h</Text>
+                        <Text className='text-left h-1/3 font-bold text-sm opacity-70 text-black'>-2.3% in 30d</Text>
+                        <Text className='text-left h-1/3 font-bold text-sm opacity-70 text-black'>-10% in 90d</Text>
+                    </Animated.View>
                 </View>
-                <View className='justify-center'>
-                    <Text className=' text-black pb-4 text-center text-xl'>
-                        What do you want to pay with?
-                    </Text>
-                </View>
-                <View className='justify-center items-center'>
-                    <TokensCarousel 
-                        className='justify-center items-center'
-                        tokens={tokens}
-                        setFromToken={setFromToken}
-                    />
-                </View>
-                <Animated.View className='opacity-90 justify-end items-center'>
-                    <TouchableOpacity 
-                        onPress={()=>{fromTokenSelected.value=1}}
-                        className='h-12 w-48 justify-center 
-                            bg-transparent 
-                            items-center rounded-full relative -bottom-3'>
-                        <ChevronUpIcon color={'black'} size={30}/>
-                    </TouchableOpacity>
+                <Animated.View style={[carouselBottomAnimatedStyle]}>
+                    <View className='justify-center'>
+                        <Text className=' text-black pb-4 text-center text-xl'>
+                            What do you want to pay with?
+                        </Text>
+                    </View>
+                    <View className='justify-center items-center'>
+                        <TokensCarousel 
+                            className='justify-center items-center'
+                            tokens={tokens}
+                            setFromToken={setFromToken}
+                        />
+                    </View>
+                    <Animated.View className='opacity-90 justify-end items-center'>
+                        <TouchableOpacity 
+                            onPress={handleTokenFromSelected}
+                            className='h-12 w-48 justify-center 
+                                bg-transparent 
+                                items-center rounded-full relative -bottom-3'>
+                            <ChevronUpIcon color={'black'} size={30}/>
+                        </TouchableOpacity>
+                    </Animated.View>
                 </Animated.View>
             </Animated.View>
         </Animated.View>
-        {/*Hidden top*/}
-        <Animated.View 
-            style={inputFormAnimatedStyleBegin}
-            className='absolute -z-10 bottom-0 h-[70%] pt-16 w-full justify-center items-center'>
+        <Animated.View style={[amountInputAnimatedStyle]}
+            className='h-1/6'>
+            <View className='justify-center'>
+                <Text className=' text-black pb-4 text-center text-xl'>
+                    How much do you want to spend?
+                </Text>
+            </View>
+            <View className='flex-1'/>
             <TextInput
-                className='text-white text-2xl text-center h-12 border-1 w-40 bg-transparent border-gray-50 mx-8 my-2 rounded-xl'
-                placeholder='Amount'
-                placeholderTextColor='gray'
-                underlineColorAndroid='gray'
-                keyboardType = 'numeric'
-                textAlign='center'
+                className='text-4xl mx-16 text-center'
+                placeholder="Amount"
+                keyboardType="numeric"
+                style={{
+                    borderBottomColor: '#000000',
+                    borderBottomWidth: 1,
+                    outline: 'none'
+                    }}
             />
             <RecapButton/>
-      </Animated.View>
+        </Animated.View>          
     </SafeAreaView>
     </>
     )
