@@ -104,7 +104,7 @@ const TokenScreen = () => {
         const interpolation = interpolate(fromTokenSelected.value, [0,1], [height,2/3*height-50])
         return {
             transform: [{
-                translateY: withTiming(interpolation, {duration: 2000})
+                translateY: withDelay(2000,withTiming(interpolation, {duration: 2000}))
             }]
         }
     })
@@ -208,7 +208,7 @@ const TokenScreen = () => {
             </View>
             <View className='flex-1'/>
             <TextInput
-                className='text-4xl mx-16 text-center'
+                className='text-4xl mx-24 text-center'
                 placeholder="Amount"
                 keyboardType="numeric"
                 style={{
