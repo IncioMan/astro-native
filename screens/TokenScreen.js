@@ -13,6 +13,7 @@ import { TextInput } from 'react-native'
 import RecapButton from '../components/RecapButton'
 import { useDispatch } from 'react-redux'
 import { addPurchase, resetPurchase } from '../features/purchaseSlice'
+import { useRef } from 'react'
 
 const TokenScreen = () => {
     const navigation = useNavigation()
@@ -20,6 +21,7 @@ const TokenScreen = () => {
     const [fromToken, setFromToken] = useState(0)
     const [showTokenFrom, setShowTokenFrom] = useState(false)
     const fromTokenSelected = useSharedValue(0)
+    const amountInputRef = useRef()
     const dispatch = useDispatch();
     const {
       params:
@@ -51,7 +53,8 @@ const TokenScreen = () => {
         fromTokenSelected.value = 1
         setTimeout(() => {
             setShowTokenFrom(true)
-        }, 2000);
+            amountInputRef.current.focus()
+        }, 1000);
     }
 
     const handleAddPurchase = (value)=>{
@@ -72,7 +75,7 @@ const TokenScreen = () => {
         return {
             transform: [
             {
-                scale: withDelay(500,withTiming(scaleInterp, {duration: 1000}))
+                scale: withDelay(250,withTiming(scaleInterp, {duration: 500}))
             }],
         }
     })
@@ -80,7 +83,7 @@ const TokenScreen = () => {
     const tokenFromAnimatedStyle = useAnimatedStyle(()=>{
         const interpolation = interpolate(fromTokenSelected.value, [0,1], [0,1])
         return {
-            opacity: withDelay(2000,withTiming(interpolation, {duration:500})),
+            opacity: withDelay(1000,withTiming(interpolation, {duration:250})),
             visibility: 'visible'
         }
     })
@@ -88,7 +91,7 @@ const TokenScreen = () => {
     const tokenInfoAnimatedStyle = useAnimatedStyle(()=>{
         const interpolation = interpolate(fromTokenSelected.value, [0,1], [1,0])
         return {
-            opacity: withTiming(interpolation, {duration:500})
+            opacity: withTiming(interpolation, {duration:250})
         }
     })
 
@@ -96,7 +99,7 @@ const TokenScreen = () => {
         const scaleInterp = interpolate(fromTokenSelected.value, [0,1], [0, height/2])
         const interpolation = interpolate(fromTokenSelected.value, [0,1], [1,0])
         return {
-            opacity: withDelay(0,withTiming(interpolation, {duration: 500}))
+            opacity: withDelay(0,withTiming(interpolation, {duration: 250}))
         }
     })
 
@@ -104,7 +107,7 @@ const TokenScreen = () => {
         const interpolation = interpolate(fromTokenSelected.value, [0,1], [height,2/3*height-50])
         return {
             transform: [{
-                translateY: withDelay(2000,withTiming(interpolation, {duration: 2000}))
+                translateY: withDelay(500,withTiming(interpolation, {duration: 500}))
             }]
         }
     })
@@ -211,6 +214,7 @@ const TokenScreen = () => {
                 className='text-4xl mx-24 text-center'
                 placeholder="Amount"
                 keyboardType="numeric"
+                ref={amountInputRef}
                 style={{
                     borderBottomColor: '#000000',
                     borderBottomWidth: 1,
