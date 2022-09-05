@@ -6,8 +6,8 @@ A mockup of the application can be seen in the following image:
 
 ![Wireframe](assets/wireframe.png)
 
-### New Tokens Screen
+### New Wireframe Screen
 
-The tokens screen has been revisited and now looks like this:
+The wireframe has been revisited and now looks like this:
 
-![Wireframe](assets/tokens_screen_2.jpeg)
+![Wireframe](/assets/mockup3.png)
