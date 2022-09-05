@@ -12,7 +12,7 @@ export default function WaitingScreen() {
   useEffect(()=>{
     setTimeout(() => {
       navigation.navigate("Done")
-    }, 4000);
+    }, 6000);
   })
 
   return (
@@ -32,7 +32,7 @@ export default function WaitingScreen() {
         iterationCount={1}
         className='text-lg text-white text-center pt-16 pb-16'
       >
-      Waiting for transaction confirmation
+      Pending
       </Animatable.Text>
       <ActivityIndicator size={'large'} color='white'/>
     </SafeAreaView>

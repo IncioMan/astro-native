@@ -1,7 +1,7 @@
 export const tokens = {
     LUNA: {
         name: 'LUNA',
-        imageUrl: 'https://assets.terra.money/icon/svg/LUNA.png',
+        imageUrl: 'https://app.astroport.fi/tokens/luna.png',
         price: 2.01,
         inWallet:13,
         dailyPerc:-15.4,

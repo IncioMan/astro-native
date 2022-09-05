@@ -1,14 +1,28 @@
-import { View, Text, Image, StatusBar } from 'react-native'
+import { View, Text, Image, StatusBar, Dimensions, SafeAreaView } from 'react-native'
 import {React, useLayoutEffect} from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { ScrollView, TouchableOpacity } from 'react-native'
-import { ArrowLeftIcon } from 'react-native-heroicons/outline'
-import PurchaseWithToken from '../components/PurchaseWithToken'
-import RecapButton from '../components/RecapButton'
 import { DataProvider } from '../utils/DataProvider'
+import TokensCarousel from '../components/TokensCarousel'
+import { useState } from 'react'
+import { useEffect } from 'react'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import Animated,{ interpolate, useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated'
+import { ArrowLeftIcon, ArrowRightIcon, ChevronUpIcon} from 'react-native-heroicons/outline'
+import { tokens } from '../data/tokens'
+import { TextInput } from 'react-native'
+import RecapButton from '../components/RecapButton'
+import { useDispatch } from 'react-redux'
+import { addPurchase, resetPurchase } from '../features/purchaseSlice'
+import { useRef } from 'react'
 
 const TokenScreen = () => {
     const navigation = useNavigation()
+    const {height, width} = Dimensions.get('window')
+    const [fromToken, setFromToken] = useState(0)
+    const [showTokenFrom, setShowTokenFrom] = useState(false)
+    const fromTokenSelected = useSharedValue(0)
+    const amountInputRef = useRef()
+    const dispatch = useDispatch();
     const {
       params:
         {
@@ -22,6 +36,8 @@ const TokenScreen = () => {
             inWallet
         }
     } = useRoute()  
+    const tokens = Object.entries(DataProvider.getTokensPurchase(tokenName))
+    console.log(tokens)
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -29,73 +45,186 @@ const TokenScreen = () => {
         })
     },[])
 
+    useEffect(()=>{
+        console.log(fromToken)
+    },[fromToken])
+
+    const handleTokenFromSelected = () =>{
+        fromTokenSelected.value = 1
+        setTimeout(() => {
+            setShowTokenFrom(true)
+            amountInputRef.current.focus()
+        }, 1000);
+    }
+
+    const handleAddPurchase = (value)=>{
+        if(value===''){
+            dispatch(resetPurchase())
+            return
+        }
+        dispatch(addPurchase({
+            fromToken: tokens[fromToken][1]?.name,
+            toToken: tokenName,
+            fromAmount: value,
+            toAmount: parseFloat((value/310).toFixed(2))
+        }))
+    }
+
+    const tokenImageAnimatedStyle = useAnimatedStyle(()=>{
+        const scaleInterp = interpolate(fromTokenSelected.value, [0,1], [1,5/6])
+        return {
+            transform: [
+            {
+                scale: withDelay(250,withTiming(scaleInterp, {duration: 500}))
+            }],
+        }
+    })
+
+    const tokenFromAnimatedStyle = useAnimatedStyle(()=>{
+        const interpolation = interpolate(fromTokenSelected.value, [0,1], [0,1])
+        return {
+            opacity: withDelay(1000,withTiming(interpolation, {duration:250})),
+            visibility: 'visible'
+        }
+    })
+
+    const tokenInfoAnimatedStyle = useAnimatedStyle(()=>{
+        const interpolation = interpolate(fromTokenSelected.value, [0,1], [1,0])
+        return {
+            opacity: withTiming(interpolation, {duration:250})
+        }
+    })
+
+    const carouselBottomAnimatedStyle = useAnimatedStyle(()=>{
+        const scaleInterp = interpolate(fromTokenSelected.value, [0,1], [0, height/2])
+        const interpolation = interpolate(fromTokenSelected.value, [0,1], [1,0])
+        return {
+            opacity: withDelay(0,withTiming(interpolation, {duration: 250}))
+        }
+    })
+
+    const amountInputAnimatedStyle = useAnimatedStyle(()=>{
+        const interpolation = interpolate(fromTokenSelected.value, [0,1], [height,2/3*height-50])
+        return {
+            transform: [{
+                translateY: withDelay(500,withTiming(interpolation, {duration: 500}))
+            }]
+        }
+    })
+
     return (
     <>
-    <ScrollView className='pb-32'>
+    <SafeAreaView className='h-full bg-[#ffffff]'>
         <StatusBar
-          backgroundColor='#060d37'
-          barStyle={'light-content'}
+          backgroundColor='#ffffff'
+          barStyle={'dark-content'}
           />
-        <View className=''>
-            <View className='flex-row p-4 pl-8 pr-8 h-48 bg-[#060d37] items-end '>
-                <View className='flex-1 justify-end'>      
-                    {(dailyPerc<0)&& <Text className='text-[#ef5176] text-4xl mb-1 font-bold'>{dailyPerc}%</Text>}
-                    {(dailyPerc>=0)&& <Text className='text-[#3edd61] text-4xl mb-1 font-bold'>+{dailyPerc}%</Text>}
-                </View>
-                <Image
-                    source={{
-                        uri: imageUrl
-                    }}
-                    className='h-20 w-20 rounded-sm mb-1 mt-2 mr-1'
-                />
-            </View>
-            <TouchableOpacity 
+        {/*Visible top*/}
+        <Animated.View 
+            style={[{height: height}]}
+            className='absolute pt-16 pb-8 overflow-hidden bg-[#ffffff]]' 
+            >
+            <TouchableOpacity
                 onPress={navigation.goBack}
-                className='absolute top-8 left-9 p-2 bg-white rounded-full'>
+                className='absolute left-9 p-2 bg-white rounded-full'>
                 <ArrowLeftIcon size={20} color='#060d37'></ArrowLeftIcon>
             </TouchableOpacity>
-        </View>
-        <View className='bg-white flex-row justify-between'>
-            <View className='px-8 pt-4'>
-                <Text className='text-3xl font-bold'>{tokenName}</Text>
+            <Animated.View className='h-full' style={[]}>
+                <View className='justify-center'>
+                    <Text className=' text-black text-center text-4xl'>
+                        {tokenName}
+                    </Text>
+                </View>
+                <View className='justify-center pt-4 px-8'>
+                    <Text className=' text-black text-justify text-base'>
+                        {description}
+                    </Text>
+                </View>
+                <View 
+                    className='border-6 border-white 
+                               rounded-full justify-center 
+                               items-center flex-row flex-1'>
+                    <Animated.View className='mr-2 h-24' style={[tokenInfoAnimatedStyle]}>
+                        <Text className='text-right h-1/3 font-bold text-sm opacity-70 text-black'>$ {price}</Text>
+                        <Text className='text-right h-1/3 font-bold text-sm opacity-70 text-black'>{inWallet} in wallet</Text>
+                        <Text className='text-right h-1/3 font-bold text-sm opacity-70 text-black'>200k volume</Text>
+                    </Animated.View>
+                    <View className='flex-row justify-center items-center'>
+                        {(showTokenFrom)&&<Animated.View 
+                            className='opacity-0 flex-row justify-center items-center'
+                            style={[tokenFromAnimatedStyle]}
+                        >
+                            <Image
+                                source={{
+                                    uri: fromToken !== null ? tokens[fromToken][1]?.imageUrl : null
+                                }}
+                                className='h-20 w-20 rounded-sm mb-1 mt-2 mr-1'
+                            />
+                            <ArrowRightIcon color={'black'} size={24}></ArrowRightIcon>
+                        </Animated.View>}
+                        <Animated.Image
+                        style={[tokenImageAnimatedStyle]}
+                        source={{
+                            uri: imageUrl
+                        }}
+                        className='h-24 w-24 
+                        rounded-sm'
+                        />
+                    </View>
+                    <Animated.View className='ml-2 h-24' style={[tokenInfoAnimatedStyle]}>
+                        <Text className='text-left h-1/3 font-bold text-sm opacity-70 text-black'>+4.3% in 24h</Text>
+                        <Text className='text-left h-1/3 font-bold text-sm opacity-70 text-black'>-2.3% in 30d</Text>
+                        <Text className='text-left h-1/3 font-bold text-sm opacity-70 text-black'>-10% in 90d</Text>
+                    </Animated.View>
+                </View>
+                <Animated.View style={[carouselBottomAnimatedStyle]}>
+                    <View className='justify-center'>
+                        <Text className=' text-black pb-4 text-center text-xl'>
+                            What do you want to pay with?
+                        </Text>
+                    </View>
+                    <View className='justify-center items-center'>
+                        <TokensCarousel 
+                            className='justify-center items-center'
+                            tokens={tokens}
+                            setFromToken={setFromToken}
+                        />
+                    </View>
+                    <Animated.View className='opacity-90 justify-end items-center'>
+                        <TouchableOpacity 
+                            onPress={handleTokenFromSelected}
+                            className='h-12 w-48 justify-center 
+                                bg-transparent 
+                                items-center rounded-full relative -bottom-3'>
+                            <ChevronUpIcon color={'black'} size={30}/>
+                        </TouchableOpacity>
+                    </Animated.View>
+                </Animated.View>
+            </Animated.View>
+        </Animated.View>
+        <Animated.View style={[amountInputAnimatedStyle]}
+            className='h-1/6'>
+            <View className='justify-center'>
+                <Text className=' text-black pb-4 text-center text-xl'>
+                    How much do you want to spend?
+                </Text>
             </View>
-            <View className='px-8 pt-4'>
-                <Text className='text-3xl font-bold mr-4'>${price}</Text>
-            </View>
-        </View>
-        <View className='bg-white flex-row justify-between'>
-            <View className='px-8'>
-                <Text className='text-gray-500 font-bold'>In wallet</Text>
-            </View>
-            <View className='px-8'>
-                <Text className='text-gray-500 font-bold mr-4'>{inWallet}</Text>
-            </View>
-        </View>
-        <View className='bg-white flex-row justify-between px-8 py-4'>
-            <Text className='text-gray-500'>
-                {description}
-            </Text>
-        </View>
-        <View>
-            <Text className='px-8 pt-4 mb-3 font-bold text-xl'>Purchase With</Text>
-            {/*Purchase with tokens*/}
-            {Object.entries(DataProvider.getTokensPurchase(tokenName)).map(([name, token])=>
-            (
-                <PurchaseWithToken
-                    key={name}
-                    id={name}
-                    tokenName={token.name}
-                    tokenAddress=''
-                    imageUrl={token.imageUrl}
-                    price={token.price}
-                    pricePerUnit={0.99}
-                    inWallet={token.inWallet}
-                    tokenToPurchase={tokenName}
-                />
-            ))}
-        </View>
-    </ScrollView>
-    <RecapButton/>
+            <View className='flex-1'/>
+            <TextInput
+                className='text-4xl mx-24 text-center'
+                placeholder="Amount"
+                keyboardType="numeric"
+                ref={amountInputRef}
+                style={{
+                    borderBottomColor: '#000000',
+                    borderBottomWidth: 1,
+                    outline: 'none'
+                    }}
+                onChangeText={handleAddPurchase}
+            />
+        </Animated.View>
+        <RecapButton/>          
+    </SafeAreaView>
     </>
     )
 }
